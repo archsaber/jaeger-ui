@@ -18,33 +18,24 @@ import * as React from 'react';
 import { Layout } from 'antd';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import type { Location } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 
-import TopNav from './TopNav';
-import type { Config } from '../../types/config';
+import { TopNav } from './TopNav';
 import { trackPageView } from '../../utils/tracking';
-
 import './Page.css';
-
-type PageProps = {
-  location: Location,
-  children: React.Node,
-  config: Config,
-};
+import { Login } from './login'
 
 const { Header, Content } = Layout;
 
 // export for tests
-export class PageImpl extends React.Component<PageProps> {
-  props: PageProps;
+export class PageImpl extends React.Component {
 
   componentDidMount() {
     const { pathname, search } = this.props.location;
     trackPageView(pathname, search);
   }
 
-  componentWillReceiveProps(nextProps: PageProps) {
+  componentWillReceiveProps(nextProps) {
     const { pathname, search } = this.props.location;
     const { pathname: nextPathname, search: nextSearch } = nextProps.location;
     if (pathname !== nextPathname || search !== nextSearch) {
@@ -53,10 +44,11 @@ export class PageImpl extends React.Component<PageProps> {
   }
 
   render() {
-    const { children, config, location } = this.props;
+    const { children, config, location, auth } = this.props;
     const menu = config && config.menu;
-    return (
-      <div>
+
+    const loggedIn = (
+        <div>
         <Helmet title="Jaeger UI" />
         <Layout>
           <Header className="Page--topNav">
@@ -65,15 +57,24 @@ export class PageImpl extends React.Component<PageProps> {
           <Content className="Page--content">{children}</Content>
         </Layout>
       </div>
-    );
+    )
+
+    if (auth.login_status === 'LOGGED_IN') {
+      return loggedIn;
+    } else {
+      return <Login/>
+    }
   }
 }
 
 // export for tests
-export function mapStateToProps(state: { config: Config, router: { location: Location } }, ownProps: any) {
-  const { config } = state;
-  const { location } = state.router;
-  return { ...ownProps, config, location };
+export function mapStateToProps(state, ownProps) {
+  return {
+    ...ownProps,
+    config: state.config,
+    location: state.router.location,
+    auth: state.auth,
+  };
 }
 
 export default withRouter(connect(mapStateToProps)(PageImpl));

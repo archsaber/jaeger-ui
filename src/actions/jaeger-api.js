@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import store from 'store';
+
 import { createAction } from 'redux-actions';
 import JaegerAPI from '../api/jaeger';
 
@@ -43,4 +45,14 @@ export const fetchServiceOperations = createAction(
 
 export const fetchDependencies = createAction('@JAEGER_API/FETCH_DEPENDENCIES', () =>
   JaegerAPI.fetchDependencies()
+);
+
+export const login = createAction(
+  '@JAEGER_API/LOGIN',
+  (mailid, pass) => JaegerAPI.login(mailid, pass)
+);
+
+export const logout = createAction(
+  '@JAEGER_API/LOGOUT',
+  () => store.remove('jwtToken')
 );

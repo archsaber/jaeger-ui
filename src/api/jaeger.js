@@ -18,6 +18,14 @@ import queryString from 'query-string';
 
 import prefixUrl from '../utils/prefix-url';
 
+const SHA256 = require('crypto-js/sha256');
+
+var TOKEN = '';
+
+export function setToken(token) {
+  TOKEN = token;
+}
+
 // export for tests
 export function getMessageFromError(errData, status) {
   if (errData.code != null && errData.msg != null) {
@@ -34,6 +42,9 @@ export function getMessageFromError(errData, status) {
 }
 
 function getJSON(url, options = {}) {
+  options.headers = {
+    'Authorization': 'BEARER ' + TOKEN,
+  }
   const { query = null, ...init } = options;
   init.credentials = 'same-origin';
   const queryStr = query ? `?${queryString.stringify(query)}` : '';
@@ -93,6 +104,16 @@ const JaegerAPI = {
   },
   fetchDependencies(endTs = new Date().getTime(), lookback = DEFAULT_DEPENDENCY_LOOKBACK) {
     return getJSON(`${this.apiRoot}dependencies`, { query: { endTs, lookback } });
+  },
+  login(mailid, pass) {
+    return getJSON("https://apm.archsaber.com/auth/v1/user/login", {
+      method: 'POST',
+      body: JSON.stringify({
+        mailid: mailid,
+        pass: SHA256(pass) + '',
+        ttlm: 60,
+      }),
+    })
   },
 };
 

@@ -3,16 +3,6 @@
   "version": "0.0.1",
   "main": "src/index.js",
   "license": "MIT",
-  "proxy": {
-    "/api": {
-      "target": "http://localhost:16686",
-      "logLevel": "silent",
-      "secure": false,
-      "changeOrigin": true,
-      "ws": true,
-      "xfwd": true
-    }
-  },
   "homepage": ".",
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -45,6 +35,7 @@
     "chance": "^1.0.10",
     "classnames": "^2.2.5",
     "combokeys": "^3.0.0",
+    "crypto-js": "^3.1.9-1",
     "cytoscape": "^3.2.1",
     "cytoscape-dagre": "^2.0.0",
     "d3-scale": "^1.0.6",
@@ -83,6 +74,7 @@
     "redux-async-middleware": "^0.0.0",
     "redux-form": "^7.0.3",
     "redux-promise-middleware": "^4.3.0",
+    "reflexbox": "^3.0.1",
     "reselect": "^3.0.1",
     "store": "^2.0.12",
     "tween-functions": "^1.2.0",
@@ -90,8 +82,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "start:ga-debug":
-      "REACT_APP_GA_DEBUG=1 REACT_APP_VSN_STATE=$(./scripts/get-tracking-version.js) react-app-rewired start",
+    "start:ga-debug": "REACT_APP_GA_DEBUG=1 REACT_APP_VSN_STATE=$(./scripts/get-tracking-version.js) react-app-rewired start",
     "build": "REACT_APP_VSN_STATE=$(./scripts/get-tracking-version.js) react-app-rewired build",
     "eject": "react-scripts eject",
     "test": "CI=1 react-app-rewired test --env=jsdom --color",
@@ -119,7 +110,14 @@
     "trailingComma": "es5"
   },
   "lint-staged": {
-    "*.{css,js,json}": ["npm run lint", "npm run test", "git add"],
-    "*.md": ["npm run prettier", "git add"]
+    "*.{css,js,json}": [
+      "npm run lint",
+      "npm run test",
+      "git add"
+    ],
+    "*.md": [
+      "npm run prettier",
+      "git add"
+    ]
   }
 }

@@ -18,6 +18,7 @@ import config from './config';
 import dependencies from './dependencies';
 import services from './services';
 import trace from './trace';
+import auth from './auth';
 
 export default {
   config,
@@ -25,4 +26,5 @@ export default {
   services,
   trace,
   form: formReducer,
+  auth,
 };

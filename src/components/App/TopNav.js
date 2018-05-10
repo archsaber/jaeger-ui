@@ -23,9 +23,25 @@ import type { ConfigMenuItem, ConfigMenuGroup } from '../../types/config';
 import { getConfigValue } from '../../utils/config/get-config';
 import prefixUrl from '../../utils/prefix-url';
 
+import * as jaegerApiActions from '../../actions/jaeger-api';
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/lib/connect/connect';
+import PropTypes from 'prop-types';
+
+function mapDispatchToProps(dispatch) {
+  const { logout } = bindActionCreators(
+      jaegerApiActions,
+      dispatch
+    );
+    return {
+        logout
+    };
+}
+
 type TopNavProps = {
   activeKey: string,
   menuConfig: (ConfigMenuItem | ConfigMenuGroup)[],
+  logout: () => void;
 };
 
 const NAV_LINKS = [
@@ -66,7 +82,7 @@ function CustomNavDropdown({ label, items }: ConfigMenuGroup) {
   );
 }
 
-export default function TopNav(props: TopNavProps) {
+function TopNavView(props: TopNavProps) {
   const { activeKey, menuConfig } = props;
   const menuItems = Array.isArray(menuConfig) ? menuConfig : [];
   return (
@@ -89,9 +105,14 @@ export default function TopNav(props: TopNavProps) {
           );
         })}
       </Menu>
+      <Menu onClick={props.logout} theme="dark" mode="horizontal" selectable={false} selectedKeys={[activeKey]} className="ub-right">
+        <Menu.Item>
+          Logout
+        </Menu.Item>
+      </Menu>
       <Menu theme="dark" mode="horizontal" selectable={false} selectedKeys={[activeKey]}>
         <Menu.Item>
-          <Link to={prefixUrl('/')}>Jaeger UI</Link>
+          <Link to={prefixUrl('/')}>ArchSaber</Link>
         </Menu.Item>
         <Menu.Item>
           <TraceIDSearchInput />
@@ -106,8 +127,14 @@ export default function TopNav(props: TopNavProps) {
   );
 }
 
-TopNav.defaultProps = {
+TopNavView.propTypes = {
+  logout: PropTypes.func,
+}
+
+TopNavView.defaultProps = {
   menuConfig: [],
 };
 
-TopNav.CustomNavDropdown = CustomNavDropdown;
+TopNavView.CustomNavDropdown = CustomNavDropdown;
+
+export const TopNav = connect(null, mapDispatchToProps)(TopNavView);
