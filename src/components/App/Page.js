@@ -49,7 +49,7 @@ export class PageImpl extends React.Component {
 
     const loggedIn = (
         <div>
-        <Helmet title="Jaeger UI" />
+        <Helmet title="APM by ArchSaber" />
         <Layout>
           <Header className="Page--topNav">
             <TopNav activeKey={location.pathname} menuConfig={menu} />
