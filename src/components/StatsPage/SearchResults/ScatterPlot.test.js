@@ -12,21 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { reducer as formReducer } from 'redux-form';
+import React from 'react';
+import { shallow } from 'enzyme';
 
-import config from './config';
-import dependencies from './dependencies';
-import services from './services';
-import trace from './trace';
-import auth from './auth';
-import stat from './stats';
+import ScatterPlot from './ScatterPlot';
 
-export default {
-  config,
-  dependencies,
-  services,
-  trace,
-  form: formReducer,
-  auth,
-  stat,
-};
+it('<ScatterPlot /> should render base case correctly', () => {
+  const wrapper = shallow(
+    <ScatterPlot
+      data={[
+        { x: Date.now() - 3000, y: 1, traceID: 1 },
+        { x: Date.now() - 2000, y: 2, traceID: 2 },
+        { x: Date.now() - 1000, y: 2, traceID: 2 },
+        { x: Date.now(), y: 3, traceID: 3 },
+      ]}
+    />,
+    { disableLifecycleMethods: true }
+  );
+  expect(wrapper).toBeTruthy();
+});

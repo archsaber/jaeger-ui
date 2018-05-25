@@ -28,7 +28,7 @@ export { default as trackMiddleware } from './track';
 export const loadOperationsForServiceMiddleware = store => next => action => {
   if (
     action.type === '@@redux-form/CHANGE' &&
-    action.meta.form === 'searchSideBar' &&
+    (action.meta.form === 'searchSideBar' || action.meta.form === 'statSideBar') &&
     action.meta.field === 'service' &&
     action.payload !== '-'
   ) {

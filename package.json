@@ -4,6 +4,16 @@
   "main": "src/index.js",
   "license": "MIT",
   "homepage": ".",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:16686",
+      "logLevel": "silent",
+      "secure": false,
+      "changeOrigin": true,
+      "ws": true,
+      "xfwd": true
+    }
+  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-plugin-import": "^1.6.3",

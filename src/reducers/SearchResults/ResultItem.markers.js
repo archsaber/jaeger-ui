@@ -12,21 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { reducer as formReducer } from 'redux-form';
-
-import config from './config';
-import dependencies from './dependencies';
-import services from './services';
-import trace from './trace';
-import auth from './auth';
-import stat from './stats';
-
-export default {
-  config,
-  dependencies,
-  services,
-  trace,
-  form: formReducer,
-  auth,
-  stat,
-};
+export const NUM_SPANS = 'num-spans';
+export const SERVICE_TAGS = 'service-tags';

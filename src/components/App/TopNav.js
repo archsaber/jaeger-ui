@@ -49,6 +49,10 @@ const NAV_LINKS = [
     to: prefixUrl('/search'),
     text: 'Search',
   },
+  {
+    to: prefixUrl('/stats'),
+    text: 'Stats',
+  }
 ];
 
 if (getConfigValue('dependencies.menuEnabled')) {

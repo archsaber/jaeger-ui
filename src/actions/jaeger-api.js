@@ -17,6 +17,12 @@ import store from 'store';
 import { createAction } from 'redux-actions';
 import JaegerAPI from '../api/jaeger';
 
+export const fetchStats = createAction(
+  '@JAEGER_API/FETCH_STATS',
+  query => JaegerAPI.fetchStats(query),
+  query => ({ query })
+)
+
 export const fetchTrace = createAction(
   '@JAEGER_API/FETCH_TRACE',
   id => JaegerAPI.fetchTrace(id),
