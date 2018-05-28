@@ -14,8 +14,6 @@
 
 import React from 'react';
 import { Form, Input, Button, Popover, Select } from 'antd';
-import logfmtParser from 'logfmt/lib/logfmt_parser';
-import { stringify as logfmtStringify } from 'logfmt/lib/stringify';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';

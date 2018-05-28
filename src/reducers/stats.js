@@ -1,8 +1,6 @@
-import keyBy from 'lodash/keyBy';
 import { handleActions } from 'redux-actions';
 
 import { fetchStats } from '../actions/jaeger-api';
-import transformTraceData from '../model/transform-trace-data';
 
 const initialState = {
   stats: [],

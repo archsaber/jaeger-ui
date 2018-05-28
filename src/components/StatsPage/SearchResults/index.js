@@ -19,8 +19,6 @@ import * as React from 'react';
 import * as markers from './index.markers';
 import ScatterPlot from './ScatterPlot';
 import LoadingIndicator from '../../common/LoadingIndicator';
-import moment from 'moment';
-import { formatDuration } from '../../../utils/date';
 
 import './index.css';
 
@@ -44,7 +42,7 @@ export default class SearchResults extends React.PureComponent<SearchResultsProp
         </div>
       );
     }
-    console.log(stats);
+
     return (
       <div>
         <div>
@@ -56,12 +54,7 @@ export default class SearchResults extends React.PureComponent<SearchResultsProp
                     <div className="ub-p3">
                       <ScatterPlot
                         onValueClick={t => {}}
-                        measure={stat.measure}
-                        data={stat.values.map(t => ({
-                          x: t.timestamp / 1000,
-                          y: stat.measure === 'duration' ? t.value / 1e6 : t.value,
-                          name: stat.measure + " - "  + (stat.measure === 'duration' ? formatDuration(t.value / 1e6, 'milliseconds') : t.value) + " (" + moment(t.timestamp / 1000).format('hh:mm:ss a') + ")"
-                        }))}
+                        data={stat}
                       />
                     </div>
                 </div>

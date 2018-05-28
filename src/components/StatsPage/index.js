@@ -25,13 +25,10 @@ import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 import ErrorMessage from '../common/ErrorMessage';
 import LoadingIndicator from '../common/LoadingIndicator';
-import { sortTraces, getTraceSummaries } from '../../model/search';
 import getLastXformCacher from '../../utils/get-last-xform-cacher';
-import prefixUrl from '../../utils/prefix-url';
 
 import './index.css';
 import JaegerLogo from '../../img/jaeger-logo.svg';
-import { stat } from 'fs';
 
 export default class StatsPage extends Component {
   componentDidMount() {

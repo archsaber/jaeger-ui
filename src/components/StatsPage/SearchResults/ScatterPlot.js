@@ -16,17 +16,30 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import dimensions from 'react-dimensions';
-import { XYPlot, XAxis, YAxis, MarkSeries, Hint } from 'react-vis';
+import { XYPlot, XAxis, YAxis, Hint, LineMarkSeries } from 'react-vis';
 import { compose, withState, withProps } from 'recompose';
 
-import { FALLBACK_TRACE_NAME } from '../../../constants';
 import { formatDuration } from '../../../utils/date';
 
 import './react-vis.css';
 import './ScatterPlot.css';
 
 function ScatterPlotImpl(props) {
-  const { data, containerWidth, onValueClick, overValue, onValueOver, onValueOut, measure } = props;
+  const { data, containerWidth, onValueClick, overValue, onValueOver, onValueOut } = props;
+  var series = {}
+  data.values.forEach(stat => {
+    Object.keys(stat.value).forEach((key) => {
+      if (!(key in series)) {
+        series[key] = []
+      }
+      series[key].push({
+        x: stat.timestamp,
+        y: data.measure === 'duration' ? stat.value[key] / 1e6 : stat.value[key],
+        name: key + " - "  + (data.measure.includes('duration') ? formatDuration(stat.value[key] / 1e6, 'milliseconds') : stat.value[key]) + " (" + moment(stat.timestamp / 1000).format('hh:mm:ss a') + ")"
+      })
+    })
+  })
+
   return (
     <div className="StatsResultsScatterPlot">
       <XYPlot
@@ -36,16 +49,33 @@ function ScatterPlotImpl(props) {
         width={containerWidth}
         height={200}
       >
-        <XAxis title="Time" tickTotal={4} tickFormat={t => moment(t).format('hh:mm:ss a')} />
-        <YAxis title={measure} tickTotal={3} tickFormat={ measure !== 'duration' ? null : t => formatDuration(t, 'milliseconds') } />
-        <MarkSeries
-          sizeRange={[3, 10]}
-          opacity={0.5}
-          onValueClick={onValueClick}
-          onValueMouseOver={onValueOver}
-          onValueMouseOut={onValueOut}
-          data={data}
-        />
+        <XAxis title="Time" tickTotal={4} tickFormat={t => moment(t).format('hh:mm:ss a')} style={{
+          title: {fontWeight: 'bold'},
+          ticks: {stroke: 'black', fontWeight: 'bold'},
+          text: {stroke: 'none', fontWeight: 'bold', fontSize: 'small'}
+        }} tickSize={3} />
+        <YAxis title={data.measure} tickTotal={3}
+          tickFormat={ data.measure !== 'duration' ? null : t => formatDuration(t, 'milliseconds') }
+          style={{
+            title: {fontWeight: 'bold'},
+            ticks: {stroke: 'black', fontWeight: 'bold'},
+            text: {stroke: 'none', fontWeight: 'bold', fontSize: 'small'}
+          }} tickSize={3} />
+        {
+          Object.keys(series).map((key, index) => {
+            return (
+                <LineMarkSeries
+              key={index}
+              sizeRange={[3, 10]}
+              opacity={0.5}
+              onValueClick={onValueClick}
+              onValueMouseOver={onValueOver}
+              onValueMouseOut={onValueOut}
+              data={series[key]}
+              />
+            )
+          })
+        }
         {overValue && (
           <Hint value={overValue}>
             <h4 className="scatter-plot-hint">{overValue.name || ""}</h4>
@@ -57,18 +87,13 @@ function ScatterPlotImpl(props) {
 }
 
 const valueShape = PropTypes.shape({
-  x: PropTypes.number,
-  y: PropTypes.number,
-  traceID: PropTypes.string,
-  size: PropTypes.number,
-  name: PropTypes.string,
+  measure: PropTypes.string,
+  values: PropTypes.arrayOf(PropTypes.object)
 });
 
 ScatterPlotImpl.propTypes = {
   containerWidth: PropTypes.number,
-  data: PropTypes.arrayOf(valueShape).isRequired,
-  measure: PropTypes.string,
-  overValue: valueShape,
+  data: valueShape.isRequired,
   onValueClick: PropTypes.func.isRequired,
   onValueOut: PropTypes.func.isRequired,
   onValueOver: PropTypes.func.isRequired,
@@ -76,7 +101,6 @@ ScatterPlotImpl.propTypes = {
 
 ScatterPlotImpl.defaultProps = {
   containerWidth: null,
-  overValue: null,
 };
 
 const ScatterPlot = compose(
