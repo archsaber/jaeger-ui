@@ -33,8 +33,8 @@ function ScatterPlotImpl(props) {
         series[key] = []
       }
       series[key].push({
-        x: stat.timestamp,
-        y: data.measure === 'duration' ? stat.value[key] / 1e6 : stat.value[key],
+        x: stat.timestamp / 1000,
+        y: data.measure.includes('duration') ? stat.value[key] / 1e6 : stat.value[key],
         name: key + " - "  + (data.measure.includes('duration') ? formatDuration(stat.value[key] / 1e6, 'milliseconds') : stat.value[key]) + " (" + moment(stat.timestamp / 1000).format('hh:mm:ss a') + ")"
       })
     })
@@ -55,7 +55,7 @@ function ScatterPlotImpl(props) {
           text: {stroke: 'none', fontWeight: 'bold', fontSize: 'small'}
         }} tickSize={3} />
         <YAxis title={data.measure} tickTotal={3}
-          tickFormat={ data.measure !== 'duration' ? null : t => formatDuration(t, 'milliseconds') }
+          tickFormat={ data.measure.includes('duration') ? null : t => formatDuration(t, 'milliseconds') }
           style={{
             title: {fontWeight: 'bold'},
             ticks: {stroke: 'black', fontWeight: 'bold'},
