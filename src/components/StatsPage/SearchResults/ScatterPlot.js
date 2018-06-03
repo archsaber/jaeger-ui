@@ -55,7 +55,7 @@ function ScatterPlotImpl(props) {
           text: {stroke: 'none', fontWeight: 'bold', fontSize: 'small'}
         }} tickSize={3} />
         <YAxis title={data.measure} tickTotal={3}
-          tickFormat={ data.measure.includes('duration') ? null : t => formatDuration(t, 'milliseconds') }
+          tickFormat={ data.measure.includes('duration') ? t => formatDuration(t, 'milliseconds') : null }
           style={{
             title: {fontWeight: 'bold'},
             ticks: {stroke: 'black', fontWeight: 'bold'},
