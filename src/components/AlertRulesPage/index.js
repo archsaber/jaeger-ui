@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React, { Component } from 'react';
-import { Col, Row } from 'antd';
+import { Col, Row, Button } from 'antd';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
@@ -26,15 +26,51 @@ import SearchResults from './SearchResults';
 import ErrorMessage from '../common/ErrorMessage';
 import LoadingIndicator from '../common/LoadingIndicator';
 import getLastXformCacher from '../../utils/get-last-xform-cacher';
+import { NewAlertForm } from './newAlertForm'
 
 import './index.css';
 import JaegerLogo from '../../img/jaeger-logo.svg';
 
-export default class StatsPage extends Component {
+export default class AlertRulesPage extends Component {
+  state = {
+    visible: false,
+  };
+  showModal = () => {
+    this.setState({ visible: true });
+  }
+  handleCancel = () => {
+    this.setState({ visible: false });
+  }
+  handleCreate = () => {
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+
+      const payload = {...values,
+        Operation: values.Operation === 'none' ? '' : values.Operation,
+        Upper: values.Upper === 'true',
+        Type: 'threshold',
+        Duration: parseFloat(values.Duration) * 60 * 1e3,
+        Limit: parseFloat(values.Limit),
+        Submeasure: values.Measure,
+        Disabled: false,
+        Env: 'none'}
+
+      this.props.setAlertRule(payload);
+      form.resetFields();
+      this.setState({ visible: false });
+    });
+  }
+  saveFormRef = (formRef) => {
+    this.formRef = formRef;
+  }
+
   componentDidMount() {
-    const { fetchStats, urlQueryParams, fetchServices, fetchServiceOperations } = this.props;
+    const { fetchAlertRules, urlQueryParams, fetchServices, fetchServiceOperations } = this.props;
     if (urlQueryParams.service) {
-      fetchStats(urlQueryParams);
+      fetchAlertRules(urlQueryParams);
     }
     fetchServices();
     const { service } = store.get('lastSearch') || {};
@@ -48,25 +84,44 @@ export default class StatsPage extends Component {
       isHomepage,
       loadingServices,
       services,
-      loadingStats,
-      stats
+      loadingRules,
+      rules
     } = this.props;
-    const hasStatsData = stats && stats.length > 0;
-    const showErrors = errors && !loadingStats;
-    const showLogo = isHomepage && !hasStatsData && !loadingStats && !errors;
+    const hasRulesData = rules && rules.length > 0;
+    const showErrors = errors && !loadingRules;
+    const showLogo = isHomepage && !hasRulesData && !loadingRules && !errors;
+
+    if (this.state.visible === true) {
+      return (
+        <div>
+          <NewAlertForm
+            services={services}
+            wrappedComponentRef={this.saveFormRef}
+            visible={this.state.visible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+          />
+        </div>
+      );
+    }
     return (
       <div>
         <Row>
           <Col span={6} className="SearchTracePage--column">
             <div className="SearchTracePage--find">
-              <h2>Explore Stats</h2>
+              <h2>Search Alert Rules
+              {!loadingServices && services ?
+              <Button style={{marginLeft: '20px'}} onClick={this.showModal} >
+                New Rule
+              </Button> : undefined }
+              </h2>
               {!loadingServices && services ? <SearchForm services={services} /> : <LoadingIndicator />}
             </div>
           </Col>
           <Col span={18} className="SearchTracePage--column">
             {showErrors && (
               <div className="js-test-error-message">
-                <h2>There was an error querying for stats:</h2>
+                <h2>There was an error querying for alert rules:</h2>
                 {errors.map(err => <ErrorMessage key={err.message} error={err} />)}
               </div>
             )}
@@ -81,8 +136,8 @@ export default class StatsPage extends Component {
             {!showErrors &&
               !showLogo && (
                 <SearchResults
-                  loading={loadingStats}
-                  stats={stats}
+                  loading={loadingRules}
+                  rules={rules}
                 />
               )}
           </Col>
@@ -92,9 +147,9 @@ export default class StatsPage extends Component {
   }
 }
 
-StatsPage.propTypes = {
+AlertRulesPage.propTypes = {
   isHomepage: PropTypes.bool,
-  stats: PropTypes.array,
+  rules: PropTypes.array,
   loadingServices: PropTypes.bool,
   urlQueryParams: PropTypes.shape({
     service: PropTypes.string,
@@ -106,7 +161,8 @@ StatsPage.propTypes = {
       operations: PropTypes.arrayOf(PropTypes.string),
     })
   ),
-  fetchStats: PropTypes.func,
+  setAlertRule: PropTypes.func,
+  fetchAlertRules: PropTypes.func,
   fetchServiceOperations: PropTypes.func,
   fetchServices: PropTypes.func,
   errors: PropTypes.arrayOf(
@@ -133,27 +189,27 @@ const stateServicesXformer = getLastXformCacher(stateServices => {
 });
 
 const stateStatXformer = getLastXformCacher(stateStat => {
-  const { stats, loading: loadingStats, error: statsError } = stateStat;
-  return { stats, loadingStats, statsError };
+  const { rules, loading: loadingRules, error: rulesError } = stateStat;
+  return { rules, loadingRules, rulesError };
 });
 
 // export to test
 export function mapStateToProps(state) {
   const query = queryString.parse(state.router.location.search);
   const isHomepage = !Object.keys(query).length;
-  const { loadingStats, stats, statsError } =  stateStatXformer(state.stat);
+  const { loadingRules, rules, rulesError } =  stateStatXformer(state.alertrules);
   const { loadingServices, services, serviceError } = stateServicesXformer(state.services);
   const errors = [];
-  if (statsError) {
-    errors.push(statsError);
+  if (rulesError) {
+    errors.push(rulesError);
   }
   if (serviceError) {
     errors.push(serviceError);
   }
   return {
     isHomepage,
-    stats,
-    loadingStats,
+    rules,
+    loadingRules,
     services,
     loadingServices,
     errors: errors.length ? errors : null,
@@ -162,14 +218,15 @@ export function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  const { fetchStats, fetchServices, fetchServiceOperations } = bindActionCreators(
+  const { fetchAlertRules, fetchServices, fetchServiceOperations, setAlertRule } = bindActionCreators(
     jaegerApiActions,
     dispatch
   );
   return {
+    setAlertRule,
     fetchServiceOperations,
     fetchServices,
-    fetchStats,
+    fetchAlertRules,
   };
 }
-export const ConnectedStatsPage = connect(mapStateToProps, mapDispatchToProps)(StatsPage);
+export const ConnectedAlertRulesPage = connect(mapStateToProps, mapDispatchToProps)(AlertRulesPage);

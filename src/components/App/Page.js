@@ -19,6 +19,7 @@ import { Layout } from 'antd';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import { TopNav } from './TopNav';
 import { trackPageView } from '../../utils/tracking';
@@ -49,6 +50,7 @@ export class PageImpl extends React.Component {
 
     const loggedIn = (
         <div>
+        <ToastContainer />
         <Helmet title="APM by ArchSaber" />
         <Layout>
           <Header className="Page--topNav">

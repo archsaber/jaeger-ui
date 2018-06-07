@@ -16,6 +16,8 @@ import promiseMiddleware from 'redux-promise-middleware';
 import queryString from 'query-string';
 import { change } from 'redux-form';
 import { replace } from 'react-router-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { searchTraces, fetchServiceOperations } from '../actions/jaeger-api';
 import prefixUrl from '../utils/prefix-url';
@@ -28,12 +30,21 @@ export { default as trackMiddleware } from './track';
 export const loadOperationsForServiceMiddleware = store => next => action => {
   if (
     action.type === '@@redux-form/CHANGE' &&
-    (action.meta.form === 'searchSideBar' || action.meta.form === 'statSideBar') &&
+    (action.meta.form === 'searchSideBar' || action.meta.form === 'statSideBar' ||
+    action.meta.form === 'alertruleSideBar') &&
     action.meta.field === 'service' &&
     action.payload !== '-'
   ) {
     store.dispatch(fetchServiceOperations(action.payload));
-    store.dispatch(change('searchSideBar', 'operation', 'all'));
+    store.dispatch(change(action.meta.form, 'operation', 'all'));
+  } else if (action.type === '@JAEGER_API/SET_ALERT_RULES_FULFILLED') {
+    toast.success("Success !", {
+      position: toast.POSITION.TOP_CENTER
+    });
+  } else if (action.type === '@JAEGER_API/SET_ALERT_RULES_REJECTED') {
+    toast.error("Error !", {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
   return next(action);
 };

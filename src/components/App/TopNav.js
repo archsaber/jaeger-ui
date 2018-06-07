@@ -52,6 +52,10 @@ const NAV_LINKS = [
   {
     to: prefixUrl('/stats'),
     text: 'Stats',
+  },
+  {
+    to: prefixUrl('/alertrules'),
+    text: 'Alert Rules',
   }
 ];
 

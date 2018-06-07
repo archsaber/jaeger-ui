@@ -17,11 +17,22 @@ import store from 'store';
 import { createAction } from 'redux-actions';
 import JaegerAPI from '../api/jaeger';
 
+export const fetchAlertRules = createAction(
+  '@JAEGER_API/FETCH_ALERT_RULES',
+  query => JaegerAPI.fetchAlertRules(query),
+  query => ({ query })
+);
+
+export const setAlertRule = createAction(
+  '@JAEGER_API/SET_ALERT_RULES',
+  (alertBody) => JaegerAPI.setAlertRule(alertBody)
+);
+
 export const fetchStats = createAction(
   '@JAEGER_API/FETCH_STATS',
   query => JaegerAPI.fetchStats(query),
   query => ({ query })
-)
+);
 
 export const fetchTrace = createAction(
   '@JAEGER_API/FETCH_TRACE',
