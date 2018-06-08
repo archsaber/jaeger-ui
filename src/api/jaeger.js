@@ -93,6 +93,9 @@ const JaegerAPI = {
       body: JSON.stringify(alertBody)
     })
   },
+  fetchAlerts(query) {
+    return getJSON(`${this.apiRoot}getalerts`, { query });
+  },
   fetchAlertRules(query) {
     return getJSON(`${this.apiRoot}getalertrules`, { query });
   },

@@ -60,7 +60,6 @@ class AlertRuleImpl extends React.PureComponent {
             </FormItem>
             <FormItem>
                 <Field
-                    style={{ width: 70 }}
                     name='Function'
                     component={AdaptedVirtualSelect}
                     clearable={false}
@@ -79,7 +78,6 @@ class AlertRuleImpl extends React.PureComponent {
 
             <FormItem>
                 <Field
-                    style={{ width: 50 }}
                     name='Upper'
                     component={AdaptedVirtualSelect}
                     clearable={false}
@@ -91,7 +89,6 @@ class AlertRuleImpl extends React.PureComponent {
 
             <FormItem>
                 <Field
-                    style={{ width: 180 }}
                     name='Limit'
                     component={AdaptedInput}
                 />
@@ -103,7 +100,6 @@ class AlertRuleImpl extends React.PureComponent {
 
             <FormItem>
                 <Field
-                    style={{ width: 180 }}
                     name='Duration'
                     component={AdaptedInput}
                 >

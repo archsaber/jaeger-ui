@@ -28,6 +28,7 @@ export const NewAlertFormImpl = Form.create()(
       const opsForSvc = (selectedServicePayload && selectedServicePayload.operations) || [];
 
       return (
+          <div>
         <Modal
           visible={visible}
           title="New Alert Rule"
@@ -113,6 +114,7 @@ export const NewAlertFormImpl = Form.create()(
             </FormItem>
           </Form>
         </Modal>
+        </div>
       );
     }
   }

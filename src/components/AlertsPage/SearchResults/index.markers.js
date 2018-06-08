@@ -12,25 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { reducer as formReducer } from 'redux-form';
-
-import config from './config';
-import dependencies from './dependencies';
-import services from './services';
-import trace from './trace';
-import auth from './auth';
-import stat from './stats';
-import alertrules from './alertrules';
-import alerts from './alerts';
-
-export default {
-  config,
-  dependencies,
-  services,
-  trace,
-  form: formReducer,
-  auth,
-  stat,
-  alertrules,
-  alerts,
-};
+// eslint-disable-next-line import/prefer-default-export
+export const NO_RESULTS = 'no-results';
