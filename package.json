@@ -41,6 +41,7 @@
     "sinon": "^3.2.1"
   },
   "dependencies": {
+    "ant-design-pro": "^1.3.0",
     "antd": "^3.0.3",
     "chance": "^1.0.10",
     "classnames": "^2.2.5",

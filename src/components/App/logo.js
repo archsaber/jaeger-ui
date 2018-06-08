@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ArchLogo = props => (
-    <svg width={90} height={90} viewBox="0 0 180 180" {...props}>
+    <svg style={{verticalAlign: 'middle'}} width={40} height={40} viewBox="0 0 180 180" {...props}>
         <g strokeWidth={8} fill="none" fillRule="evenodd" opacity={0.75}>
             <path stroke="#DF5656" d="M32.401 160.875h16.867l43.002-140.2 40.674 140.2h16.66" />
             <path

@@ -20,11 +20,10 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-
+import { ArchLogin } from './login'
 import { TopNav } from './TopNav';
 import { trackPageView } from '../../utils/tracking';
 import './Page.css';
-import { Login } from './login'
 
 const { Header, Content } = Layout;
 
@@ -61,11 +60,7 @@ export class PageImpl extends React.Component {
       </div>
     )
 
-    if (auth.login_status === 'LOGGED_IN') {
-      return loggedIn;
-    } else {
-      return <Login/>
-    }
+    return auth.login_status === 'LOGGED_IN' ? loggedIn : <ArchLogin />;
   }
 }
 

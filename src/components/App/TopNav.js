@@ -27,6 +27,7 @@ import * as jaegerApiActions from '../../actions/jaeger-api';
 import { bindActionCreators } from 'redux';
 import connect from 'react-redux/lib/connect/connect';
 import PropTypes from 'prop-types';
+import ArchLogo from './logo';
 
 function mapDispatchToProps(dispatch) {
   const { logout } = bindActionCreators(
@@ -47,7 +48,7 @@ type TopNavProps = {
 const NAV_LINKS = [
   {
     to: prefixUrl('/search'),
-    text: 'Search',
+    text: 'Traces',
   },
   {
     to: prefixUrl('/stats'),
@@ -124,7 +125,7 @@ function TopNavView(props: TopNavProps) {
       </Menu>
       <Menu theme="dark" mode="horizontal" selectable={false} selectedKeys={[activeKey]}>
         <Menu.Item>
-          <Link to={prefixUrl('/')}>ArchSaber</Link>
+          <Link to={prefixUrl('/')}><ArchLogo /></Link>
         </Menu.Item>
         <Menu.Item>
           <TraceIDSearchInput />

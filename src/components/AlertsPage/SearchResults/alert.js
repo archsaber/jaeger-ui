@@ -42,8 +42,8 @@ export default class Alert extends React.PureComponent {
           '/stats?env=none' +
           '&service=' + serviceName +
           '&operation=' + operationName +
-          '&start=' + openTime +
-          '&end=' + (closeTime > 0 ? closeTime : moment.unix(moment.now()) * 1e6)
+          '&start=' + (openTime-duration)  +
+          '&end=' + (closeTime > 0 ? closeTime : moment().valueOf() * 1e3)
         }>
           <Card title={serviceName + (operationName !== '' ? ' : ' + operationName : '')}
             style={{width: '500px'}}
