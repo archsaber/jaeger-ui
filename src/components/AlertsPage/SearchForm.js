@@ -236,7 +236,7 @@ export function SearchFormImpl(props) {
       ]}
 
       <Button htmlType="submit" disabled={disabled || noSelectedService} data-test={markers.SUBMIT_BTN}>
-        Find Alert Rules
+        Find Alerts
       </Button>
     </Form>
   );

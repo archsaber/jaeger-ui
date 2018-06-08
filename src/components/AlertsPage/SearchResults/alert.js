@@ -5,6 +5,7 @@ import { Card, Badge, Tooltip, Icon, Row, Col } from 'antd';
 import './alert.css';
 import '../SearchForm.css';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 export default class Alert extends React.PureComponent {
   props;
@@ -37,15 +38,23 @@ export default class Alert extends React.PureComponent {
           }
         </div>}
       >
-        <Card title={serviceName + (operationName !== '' ? ' : ' + operationName : '')}
-          style={{width: '500px'}}
-          extra={<Badge status={closeTime > 0 ? 'success' : 'error'} text={status} />}>
-          <p>
-            {mathFunction.toUpperCase() + '('}<b>{measure}</b>{') over ' + durationMins +
-            (durationMins > 1 ? ' minutes' : ' minute') + ' = ' + formattedActualValue +
-            ' which is' + (upper ? ' greater than ' : ' less than ') + limit}
-          </p>
-        </Card>
+        <Link to={
+          '/stats?env=none' +
+          '&service=' + serviceName +
+          '&operation=' + operationName +
+          '&start=' + openTime +
+          '&end=' + (closeTime > 0 ? closeTime : moment.unix(moment.now()) * 1e6)
+        }>
+          <Card title={serviceName + (operationName !== '' ? ' : ' + operationName : '')}
+            style={{width: '500px'}}
+            extra={<Badge status={closeTime > 0 ? 'success' : 'error'} text={status} />}>
+            <p>
+              {mathFunction.toUpperCase() + '('}<b>{measure}</b>{') over ' + durationMins +
+              (durationMins > 1 ? ' minutes' : ' minute') + ' = ' + formattedActualValue +
+              ' which is' + (upper ? ' greater than ' : ' less than ') + limit}
+            </p>
+          </Card>
+        </Link>
       </Tooltip>
       </Col>
       </Row>
