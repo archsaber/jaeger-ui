@@ -71,7 +71,7 @@ export function convertQueryParamsToFormDates({ start, end }) {
   };
 }
 
-export function submitForm(fields, fetchStats) {
+ function submitForm(fields, fetchStats) {
   const {
     service,
     startDate,
@@ -81,7 +81,6 @@ export function submitForm(fields, fetchStats) {
     operation,
     lookback,
   } = fields;
-  store.set('lastSearch', { service, operation });
 
   let start;
   let end;
@@ -104,15 +103,39 @@ export function submitForm(fields, fetchStats) {
     end = times.end;
   }
 
-  fetchStats({
-    env: "none",
-    measure: "",
-    service,
-    operation: operation !== 'all' ? operation : undefined,
-    lookback,
-    start,
-    end,
-  });
+  store.set('lastSearch', { service, operation, start, end });
+
+  if (operation === 'none') {
+    fetchStats({
+      env: "none",
+      measure: "",
+      service,
+      operation: undefined,
+      allOperations: 'y',
+      lookback,
+      start,
+      end,
+    });
+
+    fetchStats({
+      env: "none",
+      measure: "",
+      service,
+      lookback,
+      start,
+      end,
+    });
+  } else {
+    fetchStats({
+      env: "none",
+      measure: "",
+      service,
+      operation: operation,
+      lookback,
+      start,
+      end,
+    });
+  }
 }
 
 export function SearchFormImpl(props) {
@@ -122,7 +145,7 @@ export function SearchFormImpl(props) {
   const noSelectedService = selectedService === '-' || !selectedService;
   const tz = selectedLookback === 'custom' ? new Date().toTimeString().replace(/^.*?GMT/, 'UTC') : null;
   return (
-    <Form layout="vertical" onSubmit={handleSubmit}>
+    <Form layout="inline" onSubmit={handleSubmit}>
       <FormItem
         label={
           <span>
@@ -140,6 +163,7 @@ export function SearchFormImpl(props) {
             options: services.map(v => ({ label: v.name, value: v.name })),
             required: true,
           }}
+          style={{width: '200px'}}
         />
       </FormItem>
       <FormItem
@@ -156,14 +180,16 @@ export function SearchFormImpl(props) {
           props={{
             clearable: false,
             disabled: disabled || noSelectedService,
-            options: ['all'].concat(opsForSvc).map(v => ({ label: v, value: v })),
+            options: ['none'].concat(opsForSvc).map(v => ({ label: v, value: v })),
             required: true,
           }}
+          style={{width: '200px'}}
         />
       </FormItem>
 
       <FormItem label="Lookback">
-        <Field name="lookback" component={AdaptedSelect} props={{ disabled, defaultValue: '1h' }}>
+        <Field name="lookback" component={AdaptedSelect} props={{ disabled, defaultValue: '1h' }}
+               style={{width: '200px'}}>
           <Option value="1h">Last Hour</Option>
           <Option value="2h">Last 2 Hours</Option>
           <Option value="3h">Last 3 Hours</Option>
@@ -235,9 +261,11 @@ export function SearchFormImpl(props) {
         </FormItem>,
       ]}
 
-      <Button htmlType="submit" disabled={disabled || noSelectedService} data-test={markers.SUBMIT_BTN}>
-        Find Stats
-      </Button>
+      <FormItem>
+        <Button type="primary" htmlType="submit" disabled={disabled || noSelectedService || !props.isHomePage} data-test={markers.SUBMIT_BTN}>
+          Find Stats
+        </Button>
+      </FormItem>
     </Form>
   );
 }
@@ -265,13 +293,16 @@ SearchFormImpl.defaultProps = {
 export const statSideBarFormSelector = formValueSelector('statSideBar');
 
 export function mapStateToProps(state) {
+  const query = queryString.parse(state.router.location.search);
   const {
     service,
     start,
     end,
     operation,
     lookback,
-  } = queryString.parse(state.router.location.search);
+  } = query;
+
+  const isHomePage = !Object.keys(query).length;
 
   const nowInMicroseconds = moment().valueOf() * 1000;
   const today = formatDate(nowInMicroseconds);
@@ -288,7 +319,7 @@ export function mapStateToProps(state) {
         lastSearchService = lastSvc;
         if (lastOp && lastOp !== '-') {
           const ops = state.services.operationsForService[lastSvc];
-          if (lastOp === 'all' || (ops && ops.includes(lastOp))) {
+          if (lastOp === 'none' || (ops && ops.includes(lastOp))) {
             lastSearchOperation = lastOp;
           }
         }
@@ -302,7 +333,6 @@ export function mapStateToProps(state) {
     queryEndDate,
     queryEndDateTime,
   } = convertQueryParamsToFormDates({ start, end });
-
   return {
     destroyOnUnmount: false,
     initialValues: {
@@ -312,10 +342,11 @@ export function mapStateToProps(state) {
       startDateTime: queryStartDateTime || '00:00',
       endDate: queryEndDate || today,
       endDateTime: queryEndDateTime || currentTime,
-      operation: operation || lastSearchOperation || 'all',
+      operation: operation || lastSearchOperation || 'none',
     },
     selectedService: statSideBarFormSelector(state, 'service'),
     selectedLookback: statSideBarFormSelector(state, 'lookback'),
+    isHomePage
   };
 }
 

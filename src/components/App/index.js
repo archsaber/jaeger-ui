@@ -22,10 +22,10 @@ import NotFound from './NotFound';
 import Page from './Page';
 import { ConnectedDependencyGraphPage } from '../DependencyGraph';
 import { ConnectedSearchTracePage } from '../SearchTracePage';
-import { ConnectedStatsPage } from '../StatsPage';
 import { ConnectedAlertRulesPage } from '../AlertRulesPage';
 import { ConnectedAlertsPage } from '../AlertsPage';
 import { ConnectedTracePage } from '../TracePage';
+import { ConnectedServicePage } from '../ServicePage';
 import JaegerAPI, { DEFAULT_API_ROOT } from '../../api/jaeger';
 import configureStore from '../../utils/configure-store';
 import prefixUrl from '../../utils/prefix-url';
@@ -51,9 +51,9 @@ export default class JaegerUIApp extends Component {
               <Route path={prefixUrl('/search')} component={ConnectedSearchTracePage} />
               <Route path={prefixUrl('/trace/:id')} component={ConnectedTracePage} />
               <Route path={prefixUrl('/dependencies')} component={ConnectedDependencyGraphPage} />
-              <Route path={prefixUrl('/stats')} component={ConnectedStatsPage} />
               <Route path={prefixUrl('/alertrules')} component={ConnectedAlertRulesPage} />
               <Route path={prefixUrl('/alerts')} component={ConnectedAlertsPage} />
+              <Route path={prefixUrl('/services')} component={ConnectedServicePage} />
               <Redirect exact path="/" to={prefixUrl('/search')} />
               <Redirect exact path={prefixUrl()} to={prefixUrl('/search')} />
               <Redirect exact path={prefixUrl('/')} to={prefixUrl('/search')} />

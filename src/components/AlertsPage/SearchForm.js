@@ -314,6 +314,7 @@ export function mapStateToProps(state) {
       endDate: queryEndDate || today,
       endDateTime: queryEndDateTime || currentTime,
     },
+    enableReinitialize: true,
     selectedService: statSideBarFormSelector(state, 'service'),
     selectedLookback: statSideBarFormSelector(state, 'lookback'),
   };

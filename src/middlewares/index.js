@@ -36,7 +36,8 @@ export const loadOperationsForServiceMiddleware = store => next => action => {
     action.payload !== '-'
   ) {
     store.dispatch(fetchServiceOperations(action.payload));
-    store.dispatch(change(action.meta.form, 'operation', 'all'));
+    store.dispatch(change(action.meta.form, 'operation',
+      action.meta.form === 'searchSideBar' ? 'all' : 'none'));
   } else if (action.type === '@JAEGER_API/SET_ALERT_RULES_FULFILLED') {
     toast.success("Success !", {
       position: toast.POSITION.TOP_CENTER

@@ -68,14 +68,21 @@ export default class AlertRulesPage extends Component {
   }
 
   componentDidMount() {
-    const { fetchAlertRules, urlQueryParams, fetchServices, fetchServiceOperations } = this.props;
+    const { fetchAlertRules, urlQueryParams, fetchServices, fetchServiceOperations, loadingServices,
+      services } = this.props;
     if (urlQueryParams.service) {
       fetchAlertRules(urlQueryParams);
     }
-    fetchServices();
+    if (!services && !loadingServices) {
+      fetchServices();
+    }
     const { service } = store.get('lastSearch') || {};
     if (service && service !== '-') {
-      fetchServiceOperations(service);
+      const selectedServicePayload = services && services.find(s => s.name === service);
+      const opsForSvc = (selectedServicePayload && selectedServicePayload.operations) || [];
+      if (opsForSvc.length === 0) {
+        fetchServiceOperations(service);
+      }
     }
   }
   render() {

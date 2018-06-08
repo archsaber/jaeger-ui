@@ -7,6 +7,8 @@ import '../SearchForm.css';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
+import { getReadableMeasure } from '../../../utils/stats';
+
 export default class Alert extends React.PureComponent {
   props;
 
@@ -49,7 +51,7 @@ export default class Alert extends React.PureComponent {
             style={{width: '500px'}}
             extra={<Badge status={closeTime > 0 ? 'success' : 'error'} text={status} />}>
             <p>
-              {mathFunction.toUpperCase() + '('}<b>{measure}</b>{') over ' + durationMins +
+              {mathFunction.toUpperCase() + '('}<b>{getReadableMeasure(measure)}</b>{') over ' + durationMins +
               (durationMins > 1 ? ' minutes' : ' minute') + ' = ' + formattedActualValue +
               ' which is' + (upper ? ' greater than ' : ' less than ') + limit}
             </p>

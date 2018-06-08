@@ -35,14 +35,21 @@ import JaegerLogo from '../../img/jaeger-logo.svg';
 
 export default class SearchTracePage extends Component {
   componentDidMount() {
-    const { searchTraces, urlQueryParams, fetchServices, fetchServiceOperations } = this.props;
+    const { searchTraces, urlQueryParams, fetchServices, fetchServiceOperations, loadingServices,
+      services } = this.props;
     if (urlQueryParams.service || urlQueryParams.traceID) {
       searchTraces(urlQueryParams);
     }
-    fetchServices();
+    if (!services && !loadingServices) {
+      fetchServices();
+    }
     const { service } = store.get('lastSearch') || {};
     if (service && service !== '-') {
-      fetchServiceOperations(service);
+      const selectedServicePayload = services && services.find(s => s.name === service);
+      const opsForSvc = (selectedServicePayload && selectedServicePayload.operations) || [];
+      if (opsForSvc.length === 0) {
+        fetchServiceOperations(service);
+      }
     }
   }
 

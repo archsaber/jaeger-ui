@@ -471,6 +471,7 @@ export function mapStateToProps(state) {
       maxDuration: maxDuration || null,
       traceIDs: traceIDs || null,
     },
+    enableReinitialize: true,
     selectedService: searchSideBarFormSelector(state, 'service'),
     selectedLookback: searchSideBarFormSelector(state, 'lookback'),
   };

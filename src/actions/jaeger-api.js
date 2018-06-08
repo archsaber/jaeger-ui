@@ -70,10 +70,9 @@ export const fetchDependencies = createAction('@JAEGER_API/FETCH_DEPENDENCIES', 
   JaegerAPI.fetchDependencies()
 );
 
-export const login = createAction(
-  '@JAEGER_API/LOGIN',
-  (mailid, pass) => JaegerAPI.login(mailid, pass)
-);
+export const login = createAction('@JAEGER_API/LOGIN', JaegerAPI.login);
+
+export const register = createAction('@JAEGER_API/REGISTER', JaegerAPI.register);
 
 export const logout = createAction(
   '@JAEGER_API/LOGOUT',

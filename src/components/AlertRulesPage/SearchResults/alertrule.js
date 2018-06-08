@@ -5,6 +5,7 @@ import { Input, Switch } from 'antd';
 import { Form, Button } from 'antd';
 import { Field, reduxForm, isDirty } from 'redux-form';
 import reduxFormFieldAdapter from '../../../utils/redux-form-field-adapter';
+import { getReadableMeasure } from '../../../utils/stats';
 import VirtSelect from '../../common/VirtSelect';
 import * as jaegerApiActions from '../../../actions/jaeger-api';
 import { connect } from 'react-redux';
@@ -73,7 +74,7 @@ class AlertRuleImpl extends React.PureComponent {
             </FormItem>
 
             <FormItem>
-                    {Measure.toUpperCase()}
+                    {getReadableMeasure(Measure)}
             </FormItem>
 
             <FormItem>
@@ -110,9 +111,11 @@ class AlertRuleImpl extends React.PureComponent {
                 { "minutes"}
             </FormItem>
 
-            <Button disabled={!this.props.dirty} htmlType="submit" style={{verticalAlign: 'middle'}} >
-                Save
-            </Button>
+            <FormItem>
+                <Button disabled={!this.props.dirty} htmlType="submit" style={{verticalAlign: 'middle'}} >
+                    Save
+                </Button>
+            </FormItem>
         </Form>
       </div>
     );

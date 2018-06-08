@@ -151,6 +151,7 @@ export function mapStateToProps(state) {
       service: service || lastSearchService || '-',
       operation: operation || lastSearchOperation || 'all',
     },
+    enableReinitialize: true,
     selectedService: statSideBarFormSelector(state, 'service'),
   };
 }

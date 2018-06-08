@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as jaegerApiActions from '../../actions/jaeger-api';
 import { Modal, Form, Input, Select, Row, Col } from 'antd';
+
+import { getReadableMeasure } from '../../utils/stats';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -74,9 +77,9 @@ export const NewAlertFormImpl = Form.create()(
                         initialValue: 'hits',
                     })(
                         <Select>
-                            <Option value='hits'>Hits</Option>
-                            <Option value='duration'>Duration</Option>
-                            <Option value='errors'>Errors</Option>
+                            {['hits', 'duration', 'errors'].map((measure) =>
+                                <Option key={measure} value={measure}>{getReadableMeasure(measure)}</Option>
+                            )}
                         </Select>
                     )}
                     </Col>

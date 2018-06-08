@@ -47,12 +47,12 @@ type TopNavProps = {
 
 const NAV_LINKS = [
   {
-    to: prefixUrl('/search'),
-    text: 'Traces',
+    to: prefixUrl('/services'),
+    text: 'Services',
   },
   {
-    to: prefixUrl('/stats'),
-    text: 'Stats',
+    to: prefixUrl('/search'),
+    text: 'Traces',
   },
   {
     to: prefixUrl('/alerts'),

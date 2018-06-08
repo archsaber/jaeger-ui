@@ -130,6 +130,21 @@ const JaegerAPI = {
       }),
     })
   },
+  register({mailid, password, username}) {
+    const domain = mailid.split('@')[1];
+    const teamname = domain.substring(0, domain.indexOf('.'));
+    return getJSON("https://apm.archsaber.com/gst/v1/domain/reg", {
+      method: 'POST',
+      body: JSON.stringify({
+        mailid,
+        password: SHA256(password) + '',
+        teamname,
+        username,
+        plan: 'free',
+        billing: 'trial',
+      }),
+    })
+  },
 };
 
 export default JaegerAPI;

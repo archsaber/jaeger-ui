@@ -20,10 +20,11 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { ArchLogin } from './login'
+import { ArchLogin } from './login';
 import { TopNav } from './TopNav';
 import { trackPageView } from '../../utils/tracking';
 import './Page.css';
+import { AUTH_LOGGED_IN } from '../../reducers/auth';
 
 const { Header, Content } = Layout;
 
@@ -48,7 +49,7 @@ export class PageImpl extends React.Component {
     const menu = config && config.menu;
 
     const loggedIn = (
-        <div>
+      <div>
         <ToastContainer />
         <Helmet title="APM by ArchSaber" />
         <Layout>
@@ -60,7 +61,7 @@ export class PageImpl extends React.Component {
       </div>
     )
 
-    return auth.login_status === 'LOGGED_IN' ? loggedIn : <ArchLogin />;
+    return auth.login_status === AUTH_LOGGED_IN ? loggedIn : <ArchLogin />;
   }
 }
 
