@@ -30,7 +30,7 @@ import getLastXformCacher from '../../utils/get-last-xform-cacher';
 import './index.css';
 import JaegerLogo from '../../img/jaeger-logo.svg';
 
-export default class AlertsPage extends Component {
+class AlertsPage extends Component {
   componentDidMount() {
     const { fetchAlerts, urlQueryParams, fetchServices, fetchServiceOperations, loadingServices,
       services } = this.props;
@@ -178,4 +178,4 @@ function mapDispatchToProps(dispatch) {
     fetchServices,
   };
 }
-export const ConnectedAlertsPage = connect(mapStateToProps, mapDispatchToProps)(AlertsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AlertsPage);

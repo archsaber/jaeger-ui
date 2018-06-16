@@ -33,7 +33,7 @@ import JaegerLogo from '../../img/jaeger-logo.svg';
 
 Bizcharts.track(false);
 
-export default class StatsPage extends Component {
+class StatsPage extends Component {
   componentDidMount() {
     const { fetchStats, urlQueryParams, fetchServices, fetchServiceOperations , services,
       loadingServices, service, operation } = this.props;
@@ -266,4 +266,4 @@ function mapDispatchToProps(dispatch) {
     fetchStats,
   };
 }
-export const ConnectedServicePage = connect(mapStateToProps, mapDispatchToProps)(StatsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(StatsPage);

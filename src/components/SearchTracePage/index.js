@@ -33,7 +33,7 @@ import prefixUrl from '../../utils/prefix-url';
 import './index.css';
 import JaegerLogo from '../../img/jaeger-logo.svg';
 
-export default class SearchTracePage extends Component {
+class SearchTracePage extends Component {
   componentDidMount() {
     const { searchTraces, urlQueryParams, fetchServices, fetchServiceOperations, loadingServices,
       services } = this.props;
@@ -207,4 +207,4 @@ function mapDispatchToProps(dispatch) {
     searchTraces,
   };
 }
-export const ConnectedSearchTracePage = connect(mapStateToProps, mapDispatchToProps)(SearchTracePage);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchTracePage);

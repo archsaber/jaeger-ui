@@ -93,7 +93,7 @@ export function makeShortcutCallbacks(adjRange: (number, number) => void): Short
   return _mapValues(shortcutConfig, getHandler);
 }
 
-export default class TracePage extends React.PureComponent<TracePageProps, TracePageState> {
+class TracePage extends React.PureComponent<TracePageProps, TracePageState> {
   props: TracePageProps;
   state: TracePageState;
 
@@ -326,4 +326,4 @@ export function mapDispatchToProps(dispatch: Function) {
   return { acknowledgeArchive, archiveTrace, fetchTrace };
 }
 
-export const ConnectedTracePage = connect(mapStateToProps, mapDispatchToProps)(TracePage);
+export default connect(mapStateToProps, mapDispatchToProps)(TracePage);

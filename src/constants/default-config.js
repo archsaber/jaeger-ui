@@ -38,7 +38,7 @@ export default deepFreeze(
             },
             {
               label: 'Docs',
-              url: 'https://doc.archsaber.com',
+              url: 'https://doc.archsaber.com/apm/overview.html',
             },
           ],
         },

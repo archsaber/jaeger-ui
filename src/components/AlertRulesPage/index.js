@@ -31,7 +31,7 @@ import { NewAlertForm } from './newAlertForm'
 import './index.css';
 import JaegerLogo from '../../img/jaeger-logo.svg';
 
-export default class AlertRulesPage extends Component {
+class AlertRulesPage extends Component {
   state = {
     visible: false,
   };
@@ -231,4 +231,4 @@ function mapDispatchToProps(dispatch) {
     fetchAlertRules,
   };
 }
-export const ConnectedAlertRulesPage = connect(mapStateToProps, mapDispatchToProps)(AlertRulesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AlertRulesPage);

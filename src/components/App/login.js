@@ -3,11 +3,18 @@ import { connect } from 'react-redux';
 import * as jaegerApiActions from '../../actions/jaeger-api';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import MediaQuery from 'react-responsive';
 import ArchLogo from './logo';
 import Login from 'ant-design-pro/lib/Login';
-import { Alert, Row, Col, Layout, Tabs } from 'antd';
+import { Alert, Row, Col, Layout, Tabs, Button, Carousel } from 'antd';
 import ArchRegister from './register';
 import { REGISTRATION_SUCCESS, REGISTRATION_FAILURE, REGISTRATION_INIT } from '../../reducers/auth';
+import 'devicon/devicon.css';
+import './login.css';
+import RichData from '../../img/service-breakup.png';
+import UncoverErrors from '../../img/uncover-errors.png';
+import DistTracing from '../../img/distributed-tracing.png';
+import { ConnectedServicePage } from './loadable';
 
 const { UserName, Password, Submit } = Login;
 const { Header, Content } = Layout;
@@ -32,6 +39,7 @@ class LoginView extends Component {
     onSubmit = (err, values) => {
         if (!err) {
           this.props.login(values.username, values.password);
+          ConnectedServicePage.preload();
         }
     }
 
@@ -40,50 +48,105 @@ class LoginView extends Component {
     }
 
     render() {
-        const loggedOut = (
-            <Layout>
-            <Header>
-              <div style={{textAlign: 'center'}}>
-                <ArchLogo />
-              </div>
-            </Header>
-            <Content>
-              <Row style={{marginTop: '80px'}}>
-                <Col span={8} offset={8} >
-                  <Tabs
-                    animated={false}
-                    activeKey={this.state.tab}
-                    onChange={this.onTabChange}
-                  >
-                    <TabPane key="login" tab="Existing User">
-                      {this.props.register === REGISTRATION_SUCCESS && <Alert
-                        message="Registration successful. Please go to the verification link in your inbox."
-                        type="success" closable style={{marginBottom: '24px'}}/>}
-                      <Login
-                      onSubmit={this.onSubmit}
-                      defaultActiveKey={this.state.tab} onTabChange={this.onTabChange}
-                      >
-                        {
-                          this.state.notice &&
-                          <Alert style={{ marginBottom: 24 }} message={this.state.notice} type="error" showIcon closable />
-                        }
-                        <UserName name="username" placeholder="username" />
-                        <Password name="password" placeholder="password" />
-                        <Submit>Login</Submit>
-                      </Login>
-                    </TabPane>
-                    <TabPane key="register" tab="New User">
-                      <ArchRegister visible={this.state.tab === 'register'}
-                                    registerError={this.props.register === REGISTRATION_FAILURE }/>
-                    </TabPane>
-                  </Tabs>
-                </Col>
-              </Row>
-            </Content>
-            </Layout>
-          )
-
-        return loggedOut;
+      return (
+        <Layout>
+        <Header>
+          <div style={{textAlign: 'center'}}>
+            <ArchLogo />
+          </div>
+        </Header>
+        <Content>
+          <MediaQuery maxDeviceWidth={480}>
+            <Row style={{marginTop: '40px'}} className="supported-languages" >
+              <Col style={{textAlign: 'center'}}>
+                <i className="devicon-python-plain" title="Python" />
+                <i className="devicon-java-plain" title="Java" />
+                <i className="devicon-ruby-plain" title="Ruby" /> 
+                <i className="devicon-go-plain" title="Go" />
+              </Col>
+            </Row>
+            <Row style={{marginTop: '30px'}} className="supported-languages" >
+              <Col style={{textAlign: 'center'}}>
+                <i className="devicon-nodejs-plain" title="Node.JS" />
+                <i className="devicon-cplusplus-plain" title="C++" />
+                <i className="devicon-csharp-plain" title="C#" />
+              </Col>
+            </Row>
+          </MediaQuery>
+          <MediaQuery minDeviceWidth={480}>
+            <Row style={{marginTop: '40px'}} className="supported-languages" >
+              <Col style={{textAlign: 'center'}}>
+                <i className="devicon-python-plain" title="Python" />
+                <i className="devicon-java-plain" title="Java" />
+                <i className="devicon-ruby-plain" title="Ruby" /> 
+                <i className="devicon-go-plain" title="Go" />
+                <i className="devicon-nodejs-plain" title="Node.JS" />
+                <i className="devicon-cplusplus-plain" title="C++" />
+                <i className="devicon-csharp-plain" title="C#" />
+              </Col>
+            </Row>
+          </MediaQuery>
+          <Row style={{marginTop: '30px'}} >
+            <Col style={{textAlign: 'center'}}>
+              <Button target="_blank" href="https://doc.archsaber.com/apm/overview.html" type="primary" ghost>
+                Quick Start Docs
+              </Button>
+            </Col>
+          </Row>
+          <MediaQuery maxDeviceWidth={768}>
+            <Row style={{marginTop: '40px', textAlign: 'center'}} >
+              <Carousel autoplay effect={'fade'}>
+                <div>
+                  <h3>Rich Performance Data</h3>
+                  <img src={RichData} width={272} style={{display: 'inline'}} alt="presentation" />
+                </div>
+                <div>
+                  <h3>Uncover Application Errors</h3>
+                  <img src={UncoverErrors} width={272} style={{display: 'inline'}} alt="presentation" />
+                </div>
+                <div>
+                  <h3>Distributed Tracing</h3>
+                  <img src={DistTracing} width={272} style={{display: 'inline'}} alt="presentation" />
+                </div>
+              </Carousel>
+            </Row>
+          </MediaQuery>
+          <MediaQuery minDeviceWidth={768}>
+            <Row style={{marginTop: '80px'}}>
+              <Col span={8} offset={8} >
+                <Tabs
+                  animated={false}
+                  activeKey={this.state.tab}
+                  onChange={this.onTabChange}
+                >
+                  <TabPane key="login" tab="Existing User">
+                    {this.props.register === REGISTRATION_SUCCESS && <Alert
+                      message="Registration successful. Please go to the verification link in your inbox."
+                      type="success" closable style={{marginBottom: '24px'}}/>}
+                    <Login
+                    onSubmit={this.onSubmit}
+                    defaultActiveKey={this.state.tab} onTabChange={this.onTabChange}
+                    >
+                      {
+                        this.state.notice &&
+                        <Alert style={{ marginBottom: 24 }} message={this.state.notice} type="error" showIcon closable />
+                      }
+                      <UserName name="username" placeholder="username" />
+                      <Password name="password" placeholder="password" />
+                      <Submit style={{width: '100%'}}>Login</Submit>
+                    </Login>
+                  </TabPane>
+                  <TabPane key="register" tab="New User">
+                    <ArchRegister visible={this.state.tab === 'register'}
+                                  registerError={this.props.register === REGISTRATION_FAILURE }/>
+                  </TabPane>
+                </Tabs>
+              </Col>
+            </Row>
+          </MediaQuery>
+        </Content>
+        </Layout>
+      );
     }
 }
 

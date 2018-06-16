@@ -141,15 +141,23 @@ class ServiceBreakupImpl extends Component {
         ]
         const dataByMeasure = this.state.dataByMeasure;
 
-        const ops = dataByMeasure[measure] ? Object.keys(dataByMeasure[measure].axis).map((op) => {
-            const opData = dataByMeasure[measure].axis[op];
-            return {
-                op,
-                avg: _.round(opData.count > 0 ? opData.sum / opData.count : 0, 2)
-            }
-        }).sort((a, b) => {
-            return b.avg - a.avg;
-        }) : [];
+        let ops = []
+        if (dataByMeasure[measure]) {
+            Object.keys(dataByMeasure[measure].axis).forEach((op) => {
+                const opData = dataByMeasure[measure].axis[op];
+                if (opData.count === 0) {
+                    return;
+                }
+                ops.push({
+                    op,
+                    avg: _.round(opData.count > 0 ? opData.sum / opData.count : 0, 2)
+                });
+            })
+            
+            ops = ops.sort((a, b) => {
+                return b.avg - a.avg;
+            });
+        }
 
         const start = (this.state.currentPage - 1) * PAGE_SIZE;
         const end = this.state.currentPage * PAGE_SIZE;

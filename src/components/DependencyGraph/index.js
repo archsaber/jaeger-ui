@@ -40,7 +40,7 @@ export const GRAPH_TYPES = {
 
 const dagMaxNumServices = getConfigValue('dependencies.dagMaxNumServices') || FALLBACK_DAG_MAX_NUM_SERVICES;
 
-export default class DependencyGraphPage extends Component {
+class DependencyGraphPage extends Component {
   static propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     dependencies: PropTypes.any.isRequired,
@@ -129,4 +129,4 @@ export function mapDispatchToProps(dispatch) {
   return { fetchDependencies };
 }
 
-export const ConnectedDependencyGraphPage = connect(mapStateToProps, mapDispatchToProps)(DependencyGraphPage);
+export default connect(mapStateToProps, mapDispatchToProps)(DependencyGraphPage);
