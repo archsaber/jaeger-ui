@@ -22,6 +22,7 @@ import auth from './auth';
 import stat from './stats';
 import alertrules from './alertrules';
 import alerts from './alerts';
+import user from './user';
 
 export default {
   config,
@@ -33,4 +34,5 @@ export default {
   stat,
   alertrules,
   alerts,
+  user,
 };

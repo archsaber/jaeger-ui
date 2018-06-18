@@ -57,6 +57,6 @@ export default function getConfig() {
   return rv;
 }
 
-export function getConfigValue(path: string) {
+export function getConfigValue(path) {
   return _get(getConfig(), path);
 }

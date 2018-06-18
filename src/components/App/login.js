@@ -131,7 +131,11 @@ class LoginView extends Component {
                         this.state.notice &&
                         <Alert style={{ marginBottom: 24 }} message={this.state.notice} type="error" showIcon closable />
                       }
-                      <UserName name="username" placeholder="username" />
+                      <UserName name="username" placeholder="email" rules={[{
+                          required: true,
+                          message: 'Please enter email!',
+                        }]}
+                      />
                       <Password name="password" placeholder="password" />
                       <Submit style={{width: '100%'}}>Login</Submit>
                     </Login>

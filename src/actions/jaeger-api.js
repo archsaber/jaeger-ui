@@ -58,8 +58,6 @@ export const searchTraces = createAction(
   query => ({ query })
 );
 
-export const fetchServices = createAction('@JAEGER_API/FETCH_SERVICES', () => JaegerAPI.fetchServices());
-
 export const fetchServiceOperations = createAction(
   '@JAEGER_API/FETCH_SERVICE_OPERATIONS',
   serviceName => JaegerAPI.fetchServiceOperations(serviceName),
@@ -70,11 +68,12 @@ export const fetchDependencies = createAction('@JAEGER_API/FETCH_DEPENDENCIES', 
   JaegerAPI.fetchDependencies()
 );
 
+export const fetchServices = createAction('@JAEGER_API/FETCH_SERVICES', () => JaegerAPI.fetchServices());
+
 export const login = createAction('@JAEGER_API/LOGIN', JaegerAPI.login);
 
 export const register = createAction('@JAEGER_API/REGISTER', JaegerAPI.register);
 
-export const logout = createAction(
-  '@JAEGER_API/LOGOUT',
-  () => store.remove('jwtToken')
-);
+export const logout = createAction('@JAEGER_API/LOGOUT', () => store.remove('jwtToken'));
+
+export const userInfo = createAction('@JAEGER_API/USER_INFO', JaegerAPI.userInfo);

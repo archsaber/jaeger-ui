@@ -142,9 +142,13 @@ const JaegerAPI = {
         username,
         plan: 'free',
         billing: 'trial',
+        isapm: true,
       }),
     })
   },
+  userInfo() {
+    return getJSON("https://apm.archsaber.com/api/v1/domain/getinfo", { method: 'POST' })
+  }
 };
 
 export default JaegerAPI;

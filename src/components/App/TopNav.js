@@ -17,9 +17,9 @@
 import React from 'react';
 import { Dropdown, Icon, Menu } from 'antd';
 import { Link } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import TraceIDSearchInput from './TraceIDSearchInput';
-import type { ConfigMenuItem, ConfigMenuGroup } from '../../types/config';
 import { getConfigValue } from '../../utils/config/get-config';
 import prefixUrl from '../../utils/prefix-url';
 
@@ -28,22 +28,7 @@ import { bindActionCreators } from 'redux';
 import connect from 'react-redux/lib/connect/connect';
 import PropTypes from 'prop-types';
 import ArchLogo from './logo';
-
-function mapDispatchToProps(dispatch) {
-  const { logout } = bindActionCreators(
-      jaegerApiActions,
-      dispatch
-    );
-    return {
-        logout
-    };
-}
-
-type TopNavProps = {
-  activeKey: string,
-  menuConfig: (ConfigMenuItem | ConfigMenuGroup)[],
-  logout: () => void;
-};
+import { USER_INFO_FETCHED, USER_INFO_ERROR } from '../../reducers/user';
 
 const NAV_LINKS = [
   {
@@ -71,7 +56,7 @@ if (getConfigValue('dependencies.menuEnabled')) {
   });
 }
 
-function CustomNavDropdown({ label, items }: ConfigMenuGroup) {
+function AccountNavDropDown({ label, items, license }) {
   const menuItems = (
     <Menu>
       {items.map(item => {
@@ -84,6 +69,15 @@ function CustomNavDropdown({ label, items }: ConfigMenuGroup) {
           </Menu.Item>
         );
       })}
+      {
+        license && (
+          <Menu.Item key={'license'}>
+            <CopyToClipboard text={license}>
+              <span>Click to Copy License</span>
+            </CopyToClipboard>
+          </Menu.Item>
+        )
+      }
     </Menu>
   );
   return (
@@ -95,59 +89,75 @@ function CustomNavDropdown({ label, items }: ConfigMenuGroup) {
   );
 }
 
-function TopNavView(props: TopNavProps) {
-  const { activeKey, menuConfig } = props;
-  const menuItems = Array.isArray(menuConfig) ? menuConfig : [];
-  return (
-    <div>
-      <Menu theme="dark" mode="horizontal" selectable={false} className="ub-right" selectedKeys={[activeKey]}>
-        {menuItems.map(item => {
-          if (item.items) {
+class TopNavView extends React.Component {
+
+  componentWillMount() {
+    this.props.userInfo();
+  }
+
+  render() {
+    const { activeKey, menuConfig } = this.props;
+    const menuItems = Array.isArray(menuConfig) ? menuConfig : [];
+    return (
+      <div>
+        <Menu theme="dark" mode="horizontal" selectable={false} className="ub-right" selectedKeys={[activeKey]}>
+          {menuItems.map(item => {
+            if (item.items) {
+              return (
+                <Menu.Item key={item.label}>
+                  <AccountNavDropDown key={item.label} {...item} license={
+                    this.props.user.info_status === USER_INFO_FETCHED && this.props.user.info.license} />
+                </Menu.Item>
+              );
+            }
             return (
               <Menu.Item key={item.label}>
-                <CustomNavDropdown key={item.label} {...item} />
+                <a href={item.url} target="_blank" rel="noopener noreferrer">
+                  {item.label}
+                </a>
               </Menu.Item>
             );
-          }
-          return (
-            <Menu.Item key={item.label}>
-              <a href={item.url} target="_blank" rel="noopener noreferrer">
-                {item.label}
-              </a>
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-      <Menu onClick={props.logout} theme="dark" mode="horizontal" selectable={false} selectedKeys={[activeKey]} className="ub-right">
-        <Menu.Item>
-          Logout
-        </Menu.Item>
-      </Menu>
-      <Menu theme="dark" mode="horizontal" selectable={false} selectedKeys={[activeKey]}>
-        <Menu.Item>
-          <Link to={prefixUrl('/')}><ArchLogo /></Link>
-        </Menu.Item>
-        <Menu.Item>
-          <TraceIDSearchInput />
-        </Menu.Item>
-        {NAV_LINKS.map(({ to, text }) => (
-          <Menu.Item key={to}>
-            <Link to={to}>{text}</Link>
+          })}
+        </Menu>
+        <Menu onClick={this.props.logout} theme="dark" mode="horizontal" selectable={false} selectedKeys={[activeKey]} className="ub-right">
+          <Menu.Item>
+            Logout
           </Menu.Item>
-        ))}
-      </Menu>
-    </div>
-  );
+        </Menu>
+        <Menu theme="dark" mode="horizontal" selectable={false} selectedKeys={[activeKey]}>
+          <Menu.Item>
+            <Link to={prefixUrl('/')}><ArchLogo /></Link>
+          </Menu.Item>
+          <Menu.Item>
+            <TraceIDSearchInput />
+          </Menu.Item>
+          {NAV_LINKS.map(({ to, text }) => (
+            <Menu.Item key={to}>
+              <Link to={to}>{text}</Link>
+            </Menu.Item>
+          ))}
+        </Menu>
+      </div>
+    );
+  }
 }
 
 TopNavView.propTypes = {
-  logout: PropTypes.func,
+  userInfo: PropTypes.func,
+  logout: PropTypes.func
 }
 
 TopNavView.defaultProps = {
   menuConfig: [],
 };
 
-TopNavView.CustomNavDropdown = CustomNavDropdown;
+TopNavView.AccountNavDropDown = AccountNavDropDown;
 
-export const TopNav = connect(null, mapDispatchToProps)(TopNavView);
+export const TopNav = connect((state) => {
+  return {
+    user: state.user
+  }
+}, (dispatch) => {
+  const { logout, userInfo } = bindActionCreators(jaegerApiActions, dispatch);
+  return { logout, userInfo };
+})(TopNavView);
