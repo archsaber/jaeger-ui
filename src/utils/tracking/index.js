@@ -165,7 +165,7 @@ if (isGaEnabled) {
     if (versionShort && versionShort !== 'unknown') {
       ravenConfig.tags.git = versionShort;
     }
-    Raven.config('https://fakedsn@omg.com/1', ravenConfig).install();
+    Raven.config('https://a4a73e51b73b46b888cb8510cd9f4d96@sentry.io/1228786', ravenConfig).install();
     window.onunhandledrejection = function trackRejectedPromise(evt) {
       Raven.captureException(evt.reason);
     };

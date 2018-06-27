@@ -25,7 +25,7 @@ export default deepFreeze(
         menuEnabled: true,
       },
       tracking: {
-        gaID: null,
+        gaID: 'UA-77692500-2',
         trackErrors: true,
       },
       menu: [

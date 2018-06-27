@@ -34,7 +34,8 @@ function loadTokenFromLocalStorage() {
 
 const initialState =  {
     login_status: loadTokenFromLocalStorage() ? AUTH_LOGGED_IN : AUTH_LOGGED_OUT,
-    register_status: REGISTRATION_INIT
+    register_status: REGISTRATION_INIT,
+    register_error: null,
 };
 
 function fetchLoginStarted(state) {
@@ -66,7 +67,7 @@ function fetchRegisterDone(state, { payload }) {
 }
 
 function fetchRegisterRejected(state, action) {
-  return { ...state, register_status: REGISTRATION_FAILURE };
+  return { ...state, register_status: REGISTRATION_FAILURE, register_error: action.payload };
 }
 
 export default handleActions(

@@ -28,9 +28,10 @@ import {
   ConnectedAlertsPage,
   ConnectedDependencyGraphPage,
   ConnectedSearchTracePage,
-  ConnectedServicePage,
-  ConnectedTracePage
+  ConnectedServicePage
 } from './loadable';
+
+import ConnectedTracePage from '../TracePage';
 
 import './index.css';
 import '../common/utils.css';
