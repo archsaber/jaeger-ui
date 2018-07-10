@@ -22,6 +22,7 @@ const UNKNOWN_SYM = { sym: '??', word: '??' };
 
 const NAV_SYMBOLS = [
   { sym: 'dp', word: 'dependencies', rx: /^\/dep/i },
+  { sym: 'sv', word: 'services', rx: /^\/services/i },
   { sym: 'tr', word: 'trace', rx: /^\/trace/i },
   { sym: 'sd', word: 'search', rx: /^\/search\?./i },
   { sym: 'sr', word: 'search', rx: /^\/search/i },
