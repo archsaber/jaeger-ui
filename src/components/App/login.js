@@ -55,6 +55,7 @@ class LoginView extends Component {
             <ArchLogo />
           </div>
         </Header>
+        {/* <div style={{backgroundImage: `url(${RichData})`, height: '100%'}}> */}
         <Content>
           <MediaQuery maxDeviceWidth={480}>
             <Row style={{marginTop: '40px'}} className="supported-languages" >
@@ -93,27 +94,49 @@ class LoginView extends Component {
               </Button>
             </Col>
           </Row>
-          <MediaQuery maxDeviceWidth={768}>
+          <MediaQuery maxDeviceWidth={1024}>
             <Row style={{marginTop: '40px', textAlign: 'center'}} >
               <Carousel autoplay effect={'fade'}>
                 <div>
                   <h3>Rich Performance Data</h3>
-                  <img src={RichData} width={272} style={{display: 'inline'}} alt="presentation" />
+                  <img src={RichData} style={{display: 'inline', width: '90%'}} alt="presentation" />
                 </div>
                 <div>
                   <h3>Uncover Application Errors</h3>
-                  <img src={UncoverErrors} width={272} style={{display: 'inline'}} alt="presentation" />
+                  <img src={UncoverErrors} style={{display: 'inline', width: '90%'}} alt="presentation" />
                 </div>
                 <div>
                   <h3>Distributed Tracing</h3>
-                  <img src={DistTracing} width={272} style={{display: 'inline'}} alt="presentation" />
+                  <img src={DistTracing} style={{display: 'inline', width: '90%'}} alt="presentation" />
                 </div>
               </Carousel>
             </Row>
           </MediaQuery>
-          <MediaQuery minDeviceWidth={768}>
+          <MediaQuery minDeviceWidth={1025}>
             <Row style={{marginTop: '80px'}}>
-              <Col span={8} offset={8} >
+              <Col span={14} style={{textAlign: 'center'}}>
+                <Carousel autoplay effect={'fade'}>
+                  <div>
+                    <h3 style={{color: 'rgba(0, 0, 0, 0.65)', padding: 12, fontWeight: 'initial'}}>
+                        Rich Performance Data
+                    </h3>
+                    <img src={RichData} style={{display: 'inline', opacity:0.9}} width={640} alt="presentation" />
+                  </div>
+                  <div>
+                    <h3 style={{color: 'rgba(0, 0, 0, 0.65)', padding: 12, fontWeight: 'initial'}}>
+                        Uncover Application Errors
+                    </h3>
+                    <img src={UncoverErrors} style={{display: 'inline', opacity:0.9}} width={640} alt="presentation" />
+                  </div>
+                  <div>
+                    <h3 style={{color: 'rgba(0, 0, 0, 0.65)', padding: 12, fontWeight: 'initial'}}>
+                        Distributed Tracing
+                    </h3>
+                    <img src={DistTracing} style={{display: 'inline', opacity:0.9}} width={640} alt="presentation" />
+                  </div>
+                </Carousel>
+              </Col>
+              <Col span={8}>
                 <Tabs
                   animated={false}
                   activeKey={this.state.tab}
@@ -149,6 +172,7 @@ class LoginView extends Component {
             </Row>
           </MediaQuery>
         </Content>
+        {/* </div> */}
         </Layout>
       );
     }
