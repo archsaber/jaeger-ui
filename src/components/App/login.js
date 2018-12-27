@@ -87,6 +87,11 @@ class LoginView extends Component {
               </Col>
             </Row>
           </MediaQuery>
+          <Row style={{margin: '30px'}} >
+            <Col style={{textAlign: 'center', fontSize: 'xx-large'}}>
+              APM powered by open source
+            </Col>
+          </Row>
           <Row style={{marginTop: '30px'}} >
             <Col style={{textAlign: 'center'}}>
               <Button target="_blank" href="https://doc.archsaber.com/apm/overview.html" type="primary" ghost>
